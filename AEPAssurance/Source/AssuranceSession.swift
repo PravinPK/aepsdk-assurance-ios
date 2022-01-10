@@ -16,7 +16,13 @@ import Foundation
 class AssuranceSession {
     let RECONNECT_TIMEOUT = 5
     let assuranceExtension: Assurance
+    
+    // UI elements
     var pinCodeScreen: SessionAuthorizingUI?
+    lazy var statusUI: iOSStatusUI  = {
+        iOSStatusUI.init(withSession: self)
+    }()
+    
     let outboundQueue: ThreadSafeQueue = ThreadSafeQueue<AssuranceEvent>(withLimit: 200)
     let inboundQueue: ThreadSafeQueue = ThreadSafeQueue<AssuranceEvent>(withLimit: 200)
     let inboundSource: DispatchSourceUserDataAdd = DispatchSource.makeUserDataAddSource(queue: DispatchQueue.global(qos: .default))
@@ -25,10 +31,6 @@ class AssuranceSession {
 
     lazy var socket: SocketConnectable  = {
         return WebViewSocket(withDelegate: self)
-    }()
-
-    lazy var statusUI: iOSStatusUI  = {
-        iOSStatusUI.init(withSession: self)
     }()
 
     // MARK: - boolean flags
@@ -98,6 +100,10 @@ class AssuranceSession {
             self?.socket.connect(withUrl: socketURL)
             pinCodeScreen.connectionInitialized()
         })
+    }
+    
+    func connectToSocketWith(url : URL) {
+        self.socket.connect(withUrl: url)
     }
 
     ///

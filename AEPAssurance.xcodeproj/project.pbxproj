@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -53,6 +53,9 @@
 		B640722B262CF06100C43183 /* AssuranceEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640722A262CF06100C43183 /* AssuranceEnvironment.swift */; };
 		B64212B326849021007343B6 /* MockPinPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64212B226849021007343B6 /* MockPinPad.swift */; };
 		B64212B52684A655007343B6 /* AssuranceConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64212B42684A655007343B6 /* AssuranceConnectionError.swift */; };
+		B644A7AC273D07CF00B5C7BA /* AssuranceDeviceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B644A7AA273D07CF00B5C7BA /* AssuranceDeviceAPI.swift */; };
+		B644A7AD273D07CF00B5C7BA /* AssuranceDeviceRegistrationUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B644A7AB273D07CF00B5C7BA /* AssuranceDeviceRegistrationUI.swift */; };
+		B644A7B1273DD55100B5C7BA /* AssuranceDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B644A7B0273DD55100B5C7BA /* AssuranceDeviceManager.swift */; };
 		B64FDF6E264F33EF00D33192 /* AssurancePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64FDF6D264F33EF00D33192 /* AssurancePlugin.swift */; };
 		B64FDF70264F341600D33192 /* PluginFakeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64FDF6F264F341600D33192 /* PluginFakeEvent.swift */; };
 		B64FDF73264F384700D33192 /* PluginFakeEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64FDF71264F384400D33192 /* PluginFakeEventTests.swift */; };
@@ -78,6 +81,9 @@
 		B6B23ACE26414C8100EE8153 /* iOSPinCodeScreen+FullScreenDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B23ACD26414C8100EE8153 /* iOSPinCodeScreen+FullScreenDelegate.swift */; };
 		B6B23AD82641EF6500EE8153 /* AssuranceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B23AD72641EF6500EE8153 /* AssuranceTests.swift */; };
 		B6B23B3B264269A800EE8153 /* iOSPinCodeScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B23B3A264269A800EE8153 /* iOSPinCodeScreenTests.swift */; };
+		B6BC5EFA278CB80700FED0C2 /* AdobeLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BC5EF7278CB80700FED0C2 /* AdobeLogo.swift */; };
+		B6BC5EFB278CB80800FED0C2 /* ActiveIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BC5EF8278CB80700FED0C2 /* ActiveIcon.swift */; };
+		B6BC5EFC278CB80800FED0C2 /* InactiveIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BC5EF9278CB80700FED0C2 /* InactiveIcon.swift */; };
 		B6CECC4C26531ECF000D517F /* PluginConfigModify.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CECC4B26531ECF000D517F /* PluginConfigModify.swift */; };
 		B6CECC4E26531F5D000D517F /* PluginConfigModifyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CECC4D26531F5D000D517F /* PluginConfigModifyTests.swift */; };
 		B6CECC5626544700000D517F /* PluginHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CECC5526544700000D517F /* PluginHub.swift */; };
@@ -114,8 +120,6 @@
 		B6DDFAB8268139BA002D2757 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6DDFAB6268139BA002D2757 /* LaunchScreen.storyboard */; };
 		B6DDFABB268139BA002D2757 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B6DDFABA268139BA002D2757 /* main.m */; };
 		B6FEB8AC263A18E600F0F240 /* SocketScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FEB8AB263A18E600F0F240 /* SocketScript.swift */; };
-		B6FEB8B1263A18F500F0F240 /* InactiveIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FEB8AF263A18F500F0F240 /* InactiveIcon.swift */; };
-		B6FEB8B2263A18F500F0F240 /* ActiveIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FEB8B0263A18F500F0F240 /* ActiveIcon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -223,6 +227,10 @@
 		B640722A262CF06100C43183 /* AssuranceEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssuranceEnvironment.swift; sourceTree = "<group>"; };
 		B64212B226849021007343B6 /* MockPinPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPinPad.swift; sourceTree = "<group>"; };
 		B64212B42684A655007343B6 /* AssuranceConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssuranceConnectionError.swift; sourceTree = "<group>"; };
+		B644A7AA273D07CF00B5C7BA /* AssuranceDeviceAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssuranceDeviceAPI.swift; sourceTree = "<group>"; };
+		B644A7AB273D07CF00B5C7BA /* AssuranceDeviceRegistrationUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssuranceDeviceRegistrationUI.swift; sourceTree = "<group>"; };
+		B644A7AE273DB82100B5C7BA /* adobelogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = adobelogo.png; sourceTree = "<group>"; };
+		B644A7B0273DD55100B5C7BA /* AssuranceDeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssuranceDeviceManager.swift; sourceTree = "<group>"; };
 		B64FDF6D264F33EF00D33192 /* AssurancePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssurancePlugin.swift; sourceTree = "<group>"; };
 		B64FDF6F264F341600D33192 /* PluginFakeEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginFakeEvent.swift; sourceTree = "<group>"; };
 		B64FDF71264F384400D33192 /* PluginFakeEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginFakeEventTests.swift; sourceTree = "<group>"; };
@@ -248,6 +256,9 @@
 		B6B23ACD26414C8100EE8153 /* iOSPinCodeScreen+FullScreenDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "iOSPinCodeScreen+FullScreenDelegate.swift"; sourceTree = "<group>"; };
 		B6B23AD72641EF6500EE8153 /* AssuranceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssuranceTests.swift; sourceTree = "<group>"; };
 		B6B23B3A264269A800EE8153 /* iOSPinCodeScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSPinCodeScreenTests.swift; sourceTree = "<group>"; };
+		B6BC5EF7278CB80700FED0C2 /* AdobeLogo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdobeLogo.swift; sourceTree = "<group>"; };
+		B6BC5EF8278CB80700FED0C2 /* ActiveIcon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveIcon.swift; sourceTree = "<group>"; };
+		B6BC5EF9278CB80700FED0C2 /* InactiveIcon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InactiveIcon.swift; sourceTree = "<group>"; };
 		B6CECC4B26531ECF000D517F /* PluginConfigModify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginConfigModify.swift; sourceTree = "<group>"; };
 		B6CECC4D26531F5D000D517F /* PluginConfigModifyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginConfigModifyTests.swift; sourceTree = "<group>"; };
 		B6CECC5526544700000D517F /* PluginHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginHub.swift; sourceTree = "<group>"; };
@@ -289,8 +300,6 @@
 		B6DDFAB9268139BA002D2757 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B6DDFABA268139BA002D2757 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B6FEB8AB263A18E600F0F240 /* SocketScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketScript.swift; sourceTree = "<group>"; };
-		B6FEB8AF263A18F500F0F240 /* InactiveIcon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InactiveIcon.swift; sourceTree = "<group>"; };
-		B6FEB8B0263A18F500F0F240 /* ActiveIcon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveIcon.swift; sourceTree = "<group>"; };
 		B9D314818F05DBBB2D970336 /* Pods-UnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UnitTests.release.xcconfig"; path = "Target Support Files/Pods-UnitTests/Pods-UnitTests.release.xcconfig"; sourceTree = "<group>"; };
 		C1F115BB4A5B8EDAFE62E1C3 /* Pods-TestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.release.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.release.xcconfig"; sourceTree = "<group>"; };
 		E2F1D1094DD4E1801D9B111A /* Pods-AEPAssurance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPAssurance.debug.xcconfig"; path = "Target Support Files/Pods-AEPAssurance/Pods-AEPAssurance.debug.xcconfig"; sourceTree = "<group>"; };
@@ -406,6 +415,7 @@
 		B640719B262C313E00C43183 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				B644A7A9273CB40000B5C7BA /* DeviceRegistration */,
 				B63ADA8A266F6FF200A1281A /* ErrorUI */,
 				B63EB7992668C5EB005BE2C5 /* StatusUI */,
 				B6D6A0302660EC93005042BE /* Socket */,
@@ -504,6 +514,16 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		B644A7A9273CB40000B5C7BA /* DeviceRegistration */ = {
+			isa = PBXGroup;
+			children = (
+				B644A7B0273DD55100B5C7BA /* AssuranceDeviceManager.swift */,
+				B644A7AA273D07CF00B5C7BA /* AssuranceDeviceAPI.swift */,
+				B644A7AB273D07CF00B5C7BA /* AssuranceDeviceRegistrationUI.swift */,
+			);
+			path = DeviceRegistration;
+			sourceTree = "<group>";
+		};
 		B64FDF6C264F33CD00D33192 /* Plugin */ = {
 			isa = PBXGroup;
 			children = (
@@ -539,6 +559,7 @@
 		B670E67726392FEE000FCB96 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				B644A7AE273DB82100B5C7BA /* adobelogo.png */,
 				B670E67826393277000FCB96 /* active.png */,
 				B670E67926393284000FCB96 /* inactive.png */,
 			);
@@ -548,8 +569,8 @@
 		B670E67D26393300000FCB96 /* BuiltResources */ = {
 			isa = PBXGroup;
 			children = (
+				B6BC5EF6278CB79000FED0C2 /* Icons */,
 				B6FEB8A5263A179C00F0F240 /* Javascript */,
-				B6FEB88A263A0F0700F0F240 /* Icons */,
 				B670E67F263935BD000FCB96 /* HTML */,
 			);
 			path = BuiltResources;
@@ -580,6 +601,16 @@
 				B6B23ACD26414C8100EE8153 /* iOSPinCodeScreen+FullScreenDelegate.swift */,
 			);
 			path = iOS;
+			sourceTree = "<group>";
+		};
+		B6BC5EF6278CB79000FED0C2 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				B6BC5EF8278CB80700FED0C2 /* ActiveIcon.swift */,
+				B6BC5EF7278CB80700FED0C2 /* AdobeLogo.swift */,
+				B6BC5EF9278CB80700FED0C2 /* InactiveIcon.swift */,
+			);
+			path = Icons;
 			sourceTree = "<group>";
 		};
 		B6CECC632655A8A7000D517F /* Primitives */ = {
@@ -652,15 +683,6 @@
 				B6DDFABA268139BA002D2757 /* main.m */,
 			);
 			path = TestAppObjC;
-			sourceTree = "<group>";
-		};
-		B6FEB88A263A0F0700F0F240 /* Icons */ = {
-			isa = PBXGroup;
-			children = (
-				B6FEB8B0263A18F500F0F240 /* ActiveIcon.swift */,
-				B6FEB8AF263A18F500F0F240 /* InactiveIcon.swift */,
-			);
-			path = Icons;
 			sourceTree = "<group>";
 		};
 		B6FEB8A5263A179C00F0F240 /* Javascript */ = {
@@ -982,6 +1004,7 @@
 		};
 		B670E67E26393389000FCB96 /* Generate binary representation of HTML file */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 12;
 			files = (
 			);
@@ -1000,10 +1023,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n# generate Array<UInt8> representation for PinDialog.html\n# Output file - PinDialog.swift\necho \"enum PinDialogHTML {\" > ${SCRIPT_OUTPUT_FILE_0}\necho \"    static let content : [UInt8] = [\" >> ${SCRIPT_OUTPUT_FILE_0}\ncat ${SCRIPT_INPUT_FILE_0} | xxd -i >> ${SCRIPT_OUTPUT_FILE_0}\necho  \"]\" >> ${SCRIPT_OUTPUT_FILE_0}\necho \"}\" >> ${SCRIPT_OUTPUT_FILE_0}\n\n# generate Array<UInt8> representation StatusInfo.html\n# Output file - StatusInfo.swift\necho \"enum StatusInfoHTML {\" > ${SCRIPT_OUTPUT_FILE_1}\necho \"    static let content : [UInt8] = [\" >> ${SCRIPT_OUTPUT_FILE_1}\ncat ${SCRIPT_INPUT_FILE_1} |  xxd -i >> ${SCRIPT_OUTPUT_FILE_1}\necho  \"]\" >> ${SCRIPT_OUTPUT_FILE_1}\necho \"}\" >> ${SCRIPT_OUTPUT_FILE_1}\n";
+			shellScript = "#!/bin/sh\n\n# generate Array<UInt8> representation for PinDialog.html\n# Output file - PinDialog.swift\n#echo \"enum PinDialogHTML {\" > ${SCRIPT_OUTPUT_FILE_0}\n#echo \"    static let content : [UInt8] = [\" >> ${SCRIPT_OUTPUT_FILE_0}\n#cat ${SCRIPT_INPUT_FILE_0} | xxd -i >> ${SCRIPT_OUTPUT_FILE_0}\n#echo  \"]\" >> ${SCRIPT_OUTPUT_FILE_0}\n#echo \"}\" >> ${SCRIPT_OUTPUT_FILE_0}\n\n# generate Array<UInt8> representation StatusInfo.html\n# Output file - StatusInfo.swift\n#echo \"enum StatusInfoHTML {\" > ${SCRIPT_OUTPUT_FILE_1}\n#echo \"    static let content : [UInt8] = [\" >> ${SCRIPT_OUTPUT_FILE_1}\n#cat ${SCRIPT_INPUT_FILE_1} |  xxd -i >> ${SCRIPT_OUTPUT_FILE_1}\n#echo  \"]\" >> ${SCRIPT_OUTPUT_FILE_1}\n#echo \"}\" >> ${SCRIPT_OUTPUT_FILE_1}\n";
+			showEnvVarsInLog = 0;
 		};
 		B6FEB899263A13A400F0F240 /* Generate binary representation of Icons */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 12;
 			files = (
 			);
@@ -1012,6 +1037,7 @@
 			inputPaths = (
 				"$(SRCROOT)/Resources/Icons/active.png",
 				"$(SRCROOT)/Resources/Icons/inactive.png",
+				"$(SRCROOT)/Resources/Icons/adobelogo.png",
 			);
 			name = "Generate binary representation of Icons";
 			outputFileListPaths = (
@@ -1019,13 +1045,15 @@
 			outputPaths = (
 				"$(SRCROOT)/AEPAssurance/Source/BuiltResources/Icons/ActiveIcon.swift",
 				"$(SRCROOT)/AEPAssurance/Source/BuiltResources/Icons/InactiveIcon.swift",
+				"$(SRCROOT)/AEPAssurance/Source/BuiltResources/Icons/AdobeLogo.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n# Generate Array<UInt8> representation for active.png\n# Output file - ActiveIcon.swift\necho \"enum ActiveIcon {\" > ${SCRIPT_OUTPUT_FILE_0}\necho \"    static let content : [UInt8] = [\" >> ${SCRIPT_OUTPUT_FILE_0}\ncat ${SCRIPT_INPUT_FILE_0} | xxd -i >> ${SCRIPT_OUTPUT_FILE_0}\necho  \"]\" >> ${SCRIPT_OUTPUT_FILE_0}\necho \"}\" >> ${SCRIPT_OUTPUT_FILE_0}\n\n# Generate Array<UInt8> representation inactive.png\n# Output file - InActiveIcon.swift\necho \"enum InactiveIcon {\" > ${SCRIPT_OUTPUT_FILE_1}\necho \"    static let content : [UInt8] = [\" >> ${SCRIPT_OUTPUT_FILE_1}\ncat ${SCRIPT_INPUT_FILE_1} |  xxd -i >> ${SCRIPT_OUTPUT_FILE_1}\necho  \"]\" >> ${SCRIPT_OUTPUT_FILE_1}\necho \"}\" >> ${SCRIPT_OUTPUT_FILE_1}\n";
+			shellScript = "#!/bin/sh\n\n# Generate Array<UInt8> representation for active.png\n# Output file - ActiveIcon.swift\necho \"enum ActiveIcon {\" > ${SCRIPT_OUTPUT_FILE_0}\necho \"    static let content : [UInt8] = [\" >> ${SCRIPT_OUTPUT_FILE_0}\ncat ${SCRIPT_INPUT_FILE_0} | xxd -i >> ${SCRIPT_OUTPUT_FILE_0}\necho  \"]\" >> ${SCRIPT_OUTPUT_FILE_0}\necho \"}\" >> ${SCRIPT_OUTPUT_FILE_0}\n\n# Generate Array<UInt8> representation inactive.png\n# Output file - InActiveIcon.swift\necho \"enum InactiveIcon {\" > ${SCRIPT_OUTPUT_FILE_1}\necho \"    static let content : [UInt8] = [\" >> ${SCRIPT_OUTPUT_FILE_1}\ncat ${SCRIPT_INPUT_FILE_1} |  xxd -i >> ${SCRIPT_OUTPUT_FILE_1}\necho  \"]\" >> ${SCRIPT_OUTPUT_FILE_1}\necho \"}\" >> ${SCRIPT_OUTPUT_FILE_1}\n\n# Generate Array<UInt8> representation inactive.png\n# Output file - InActiveIcon.swift\necho \"enum adobeLogo {\" > ${SCRIPT_OUTPUT_FILE_2}\necho \"   static let content : [UInt8] = [\" >> ${SCRIPT_OUTPUT_FILE_2}\ncat ${SCRIPT_INPUT_FILE_2} |  xxd -i >> ${SCRIPT_OUTPUT_FILE_2}\necho  \"]\" >> ${SCRIPT_OUTPUT_FILE_2}\necho \"}\" >> ${SCRIPT_OUTPUT_FILE_2}\n";
 		};
 		B6FEB8A4263A171200F0F240 /* Generate binary representation of Javascript files */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 12;
 			files = (
 			);
@@ -1042,7 +1070,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n# generate Array<UInt8> representation for SocketScript.js\n# Output file - SocketScript.swift\necho \"enum SocketScript {\" > ${SCRIPT_OUTPUT_FILE_0}\necho \"    static let content : [UInt8] = [\" >> ${SCRIPT_OUTPUT_FILE_0}\ncat ${SCRIPT_INPUT_FILE_0} | xxd -i >> ${SCRIPT_OUTPUT_FILE_0}\necho  \"]\" >> ${SCRIPT_OUTPUT_FILE_0}\necho \"}\" >> ${SCRIPT_OUTPUT_FILE_0}\n";
+			shellScript = "#!/bin/sh\n\n# generate Array<UInt8> representation for SocketScript.js\n# Output file - SocketScript.swift\n#echo \"enum SocketScript {\" > ${SCRIPT_OUTPUT_FILE_0}\n#echo \"    static let content : [UInt8] = [\" >> ${SCRIPT_OUTPUT_FILE_0}\n#cat ${SCRIPT_INPUT_FILE_0} | xxd -i >> ${SCRIPT_OUTPUT_FILE_0}\n#echo  \"]\" >> ${SCRIPT_OUTPUT_FILE_0}\n#echo \"}\" >> ${SCRIPT_OUTPUT_FILE_0}\n";
 		};
 		DE0A0E17DF6874976616C93F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1109,13 +1137,15 @@
 				B6D6A0392660ECBD005042BE /* SocketState.swift in Sources */,
 				B6D6A022265F914D005042BE /* PluginScreenshot.swift in Sources */,
 				B640722B262CF06100C43183 /* AssuranceEnvironment.swift in Sources */,
-				B6FEB8B2263A18F500F0F240 /* ActiveIcon.swift in Sources */,
 				B6B0E2C9263C674F00EF5E21 /* SessionAuthorizingUI.swift in Sources */,
-				B6FEB8B1263A18F500F0F240 /* InactiveIcon.swift in Sources */,
 				B60BAC0C26434ED90054CD21 /* AssuranceConnectionError.swift in Sources */,
+				B6BC5EFB278CB80800FED0C2 /* ActiveIcon.swift in Sources */,
+				B644A7AD273D07CF00B5C7BA /* AssuranceDeviceRegistrationUI.swift in Sources */,
 				B6B0E2CD263C709100EF5E21 /* iOSPinCodeScreen.swift in Sources */,
+				B6BC5EFA278CB80700FED0C2 /* AdobeLogo.swift in Sources */,
 				B6407206262C90FA00C43183 /* Assurance+PublicAPI.swift in Sources */,
 				B63ADAB5267262F600A1281A /* iOSStatusUI+FullScreenDelegate.swift in Sources */,
+				B644A7B1273DD55100B5C7BA /* AssuranceDeviceManager.swift in Sources */,
 				B6B0E2D7263C7FAB00EF5E21 /* AssuranceSession.swift in Sources */,
 				B63ADABE26732C8100A1281A /* AssuranceSession+EventHandler.swift in Sources */,
 				B64FDF6E264F33EF00D33192 /* AssurancePlugin.swift in Sources */,
@@ -1123,6 +1153,8 @@
 				B63ADAB12672629700A1281A /* iOSStatusUI.swift in Sources */,
 				B6D6A0412660ED56005042BE /* NativeSocket.swift in Sources */,
 				B6D6A01B265F027C005042BE /* AssuranceBlob.swift in Sources */,
+				B644A7AC273D07CF00B5C7BA /* AssuranceDeviceAPI.swift in Sources */,
+				B6BC5EFC278CB80800FED0C2 /* InactiveIcon.swift in Sources */,
 				B63ADAB3267262DF00A1281A /* iOSStatusUI+FloatingButtonDelegate.swift in Sources */,
 				B6AB2DE6263372AF00FE8AEA /* Assurance+State.swift in Sources */,
 			);

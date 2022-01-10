@@ -20,6 +20,7 @@ enum AssuranceConstants {
     static let DEFAULT_ENVIRONMENT = AssuranceEnvironment.prod
 
     static let BASE_SOCKET_URL = "wss://connect%@.griffon.adobe.com/client/v1?sessionId=%@&token=%@&orgId=%@&clientId=%@"
+    static let BASE_DEVICE_API_URL = "https://device.griffon.adobe.com/device/"
     static let SHUTDOWN_TIME = 5
 
     enum Deeplink {
@@ -157,5 +158,14 @@ enum AssuranceConstants {
             static let REGION_EVENT_TYPE = "regioneventtype"
             static let NEARBY_POI = "nearbypois"
         }
+    }
+    
+    enum Network {
+        static let CONNECTION_TIMEOUT = TimeInterval(10)
+        static let READ_TIMEOUT = TimeInterval(10)
+    }
+    
+    enum ShakeGesture {
+        static let NOTIFICATION_KEY = "AdobeAssuranceShakeDetector"
     }
 }

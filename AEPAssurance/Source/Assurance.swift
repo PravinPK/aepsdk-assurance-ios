@@ -30,7 +30,11 @@ public class Assurance: NSObject, Extension {
     var assuranceSession: AssuranceSession?
     var shouldProcessEvents: Bool = true
     var timer: DispatchSourceTimer?
+    var deviceManager : AssuranceDeviceManager?
 
+    /// property representing the sessionId of the Assurance session
+    /// A valid value on this property represents that an assurance session connection has been initialized.
+    /// A nil value on this property represents there is no attempt to make an assurance session connection.
     var sessionId: String? {
         get {
             datastore.getString(key: AssuranceConstants.DataStoreKeys.SESSION_ID)
@@ -50,7 +54,8 @@ public class Assurance: NSObject, Extension {
         }
     }
 
-    // getter for client ID
+    /// property representing the unique clientID representing the device for assurance sessions.
+    /// clientID is maintained for the lifecycle of the application,
     lazy var clientID: String = {
         // return with clientId, if it is already available in persistence
         if let persistedClientID = datastore.getString(key: AssuranceConstants.DataStoreKeys.CLIENT_ID) {
@@ -83,7 +88,7 @@ public class Assurance: NSObject, Extension {
     public func onRegistered() {
         registerListener(type: EventType.wildcard, source: EventSource.wildcard, listener: handleWildcardEvent)
         self.assuranceSession = AssuranceSession(self)
-
+        
         /// if the Assurance session was already connected in the previous app session, go ahead and reconnect socket
         /// and do not turn on the unregister timer
         if connectedWebSocketURL != nil {
@@ -91,6 +96,11 @@ public class Assurance: NSObject, Extension {
             assuranceSession?.startSession()
             return
         }
+        
+        #if DEBUG
+        self.deviceManager = AssuranceDeviceManager(assurance: self)
+        deviceManager?.detectShakeGesture()
+        #endif
 
         /// if the Assurance session is not previously connected, turn on 5 sec timer to wait for Assurance deeplink
         startShutDownTimer()
@@ -306,7 +316,7 @@ public class Assurance: NSObject, Extension {
     }
 
     /// Invalidate the ongoing timer and cleans it from memory
-    private func invalidateTimer() {
+    func invalidateTimer() {
         timer?.cancel()
         timer = nil
     }
@@ -383,4 +393,13 @@ public class Assurance: NSObject, Extension {
         payload[AssuranceConstants.PayloadKey.METADATA] = [stateType: stateContent]
         return AssuranceEvent(type: AssuranceConstants.EventType.GENERIC, payload: payload)
     }
+    
+
+    
+    func getURLEncodedOrgID() -> String? {
+        let configState = runtime.getSharedState(extensionName: AssuranceConstants.SharedStateName.CONFIGURATION, event: nil, barrier: false)
+        let orgID = configState?.value?[AssuranceConstants.EventDataKey.CONFIG_ORG_ID] as? String
+        return orgID?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+    }
+    
 }

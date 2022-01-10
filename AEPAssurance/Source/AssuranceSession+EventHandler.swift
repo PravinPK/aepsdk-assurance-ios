@@ -42,7 +42,11 @@ extension AssuranceSession {
             while self.outboundQueue.size() > 0 {
                 let event = self.outboundQueue.dequeue()
                 if let event = event {
-                    self.socket.sendEvent(event)
+                    if (event.size > 8) {
+                        self.sendEventAsBlob(event: event)
+                    } else {
+                        self.socket.sendEvent(event)
+                    }
                 }
             }
         })
@@ -94,6 +98,18 @@ extension AssuranceSession {
             }
         })
         inboundSource.resume()
+    }
+    
+    
+    func sendEventAsBlob(event : AssuranceEvent) {
+        AssuranceBlob.sendBlob(event.jsonData, forSession: self, contentType: "application/json", callback: { blobID in
+            if blobID != nil {
+                let blobEvent = AssuranceEvent(type: AssuranceConstants.EventType.BLOB, payload: ["blobId": AnyCodable(blobID), "mimeType": "application/json"])
+                self.socket.sendEvent(blobEvent)
+            } else {
+                Log.debug(label: AssuranceConstants.LOG_TAG, "Uploading screenshot failed. Ignoring the screenShot request.")
+            }
+        })
     }
 
 }

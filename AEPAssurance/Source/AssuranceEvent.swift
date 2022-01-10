@@ -160,5 +160,15 @@ struct AssuranceEvent: Codable {
             "]"
         // swiftformat:enable indent
     }
+    
+    var jsonData : Data {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .millisecondsSince1970
+        return (try? encoder.encode(self)) ?? Data()
+    }
+    
+    var size : Int {
+        return jsonData.count / 1024
+    }        
 
 }

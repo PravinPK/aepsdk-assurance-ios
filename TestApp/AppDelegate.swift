@@ -29,23 +29,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        MobileCore.setLogLevel(.trace)
+//        MobileCore.setLogLevel(.trace)
+//        let extensions = [AEPIdentity.Identity.self,
+//                          Lifecycle.self,
+//                          Signal.self,
+//                          Edge.self,
+//                          Consent.self,
+////                          Analytics.self,
+//                          AEPEdgeIdentity.Identity.self,
+//                          Target.self,
+//                          Consent.self,
+//                          UserProfile.self,
+//                          Assurance.self,
+//                          Places.self
+//        ]
+//
+//        MobileCore.registerExtensions(extensions, {
+//            MobileCore.configureWith(appId: "94f571f308d5/d3131a927d4c/launch-1b4cb493d882-development")
+//        })
+        
+        
+        
+        
+        // Onboarding Install Instructions
+        // No deeplink setup required
         let extensions = [AEPIdentity.Identity.self,
                           Lifecycle.self,
-                          Signal.self,
-                          Edge.self,
-                          Consent.self,
-                          Analytics.self,
-                          AEPEdgeIdentity.Identity.self,
-                          Target.self,
-                          Consent.self,
-                          UserProfile.self,
-                          Assurance.self,
-                          Places.self
-        ]
+                          Assurance.self]
         MobileCore.registerExtensions(extensions, {
-            MobileCore.configureWith(appId: "")
+            MobileCore.configureWith(appId: "launch-ENbc59c20ad405417a9622ae1e22f6a13e-development")
+            MobileCore.lifecycleStart(additionalContextData: nil)
         })
+        
+        Assurance.startSession(url: URL(string: "griffon://?adb_validation_sessionid=e2e64f7d-56d9-4900-b821-ea1a446d2500"))
+        
+    
 
         return true
     }
