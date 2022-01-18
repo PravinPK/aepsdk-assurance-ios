@@ -48,7 +48,7 @@ class PluginScreenshot: AssurancePlugin {
 
             AssuranceBlob.sendBlob(imageData, forSession: session, contentType: "image/png", callback: { blobID in
                 if blobID != nil {
-                    let assuranceEvent = AssuranceEvent(type: AssuranceConstants.EventType.BLOB, payload: ["blobId": AnyCodable(blobID), "mimeType": "image/png"])
+                    let assuranceEvent = AssuranceEvent(type: AssuranceConstants.EventType.BLOB, payload: ["blobId": AnyCodable(blobID), "mimeType": "image/png"], metadata: nil)
                     self.session?.sendEvent(assuranceEvent)
                 } else {
                     Log.debug(label: AssuranceConstants.LOG_TAG, "Uploading screenshot failed. Ignoring the screenShot request.")

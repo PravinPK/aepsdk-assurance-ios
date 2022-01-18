@@ -28,6 +28,8 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        
         // Override point for customization after application launch.
         MobileCore.setLogLevel(.trace)
         let extensions = [AEPIdentity.Identity.self,
@@ -43,9 +45,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                           Assurance.self,
                           Places.self
         ]
+        
+        /// create a page
+        ///
         MobileCore.registerExtensions(extensions, {
-            MobileCore.configureWith(appId: "")
+            MobileCore.configureWith(appId: "launch-ENbc59c20ad405417a9622ae1e22f6a13e-development")
         })
+        
+        Assurance.startSession(url: URL(string: "griffon://?adb_validation_sessionid=da36e9e8-6d6f-48b2-8d0d-28c548ec0b53"))
 
         return true
     }

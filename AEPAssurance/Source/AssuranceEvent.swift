@@ -1,3 +1,4 @@
+
 /*
  Copyright 2021 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -21,6 +22,7 @@ struct AssuranceEvent: Codable {
     var payload: [String: AnyCodable]?
     var eventNumber: Int32?
     var timestamp: Date?
+    var metadata: [String: AnyCodable]?
 
     /// Decodes a JSON data into a `AssuranceEvent`
     ///
@@ -81,7 +83,7 @@ struct AssuranceEvent: Codable {
             payload[AssuranceConstants.ACPExtensionEventKey.RESPONSE_IDENTIFIER] = AnyCodable.init(responseID.uuidString)
         }
 
-        return AssuranceEvent(type: AssuranceConstants.EventType.GENERIC, payload: payload)
+        return AssuranceEvent(type: AssuranceConstants.EventType.GENERIC, payload: payload, metadata: nil)
     }
 
     /// Initializer to construct `AssuranceEvent`instance with the given parameters
@@ -91,11 +93,12 @@ struct AssuranceEvent: Codable {
     ///   - payload: A dictionary representing the payload to be sent wrapped in the event. This will be serialized into JSON in the transportation process
     ///   - timestamp: optional argument representing the time original event was created. If not provided current time is taken
     ///   - vendor: vendor for the created `AssuranceEvent` defaults to "com.adobe.griffon.mobile".
-    init(type: String, payload: [String: AnyCodable]?, timestamp: Date = Date(), vendor: String = AssuranceConstants.Vendor.MOBILE) {
+    init(type: String, payload: [String: AnyCodable]?, timestamp: Date = Date(), vendor: String = AssuranceConstants.Vendor.MOBILE, metadata: [String: AnyCodable]?) {
         self.type = type
         self.payload = payload
         self.timestamp = timestamp
         self.vendor = vendor
+        self.metadata = metadata
         self.eventNumber = AssuranceEvent.generateEventNumber()
     }
 
@@ -157,8 +160,21 @@ struct AssuranceEvent: Codable {
             "  payload: \(PrettyDictionary.prettify(payload))\n" +
             "  eventNumber: \(String(describing: eventNumber))\n" +
             "  timestamp: \(String(describing: timestamp?.description))\n" +
+            "  metadata: \(PrettyDictionary.prettify(metadata))\n" +
             "]"
         // swiftformat:enable indent
     }
 
+    var jsonData : Data {
+        let encoder = JSONEncoder()
+         encoder.dateEncodingStrategy = .millisecondsSince1970
+        return (try? encoder.encode(self)) ?? Data()
+    }
+    
+    var size : Int {
+        return jsonData.count / 1024
+    }
+    
 }
+
+

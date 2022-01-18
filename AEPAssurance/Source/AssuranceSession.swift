@@ -52,7 +52,7 @@ class AssuranceSession {
     }
 
     ///
-    /// Called this method to start an Assurance session.
+    /// Call this method to start an Assurance session.
     /// If the session was already connected, It will resume the connection.
     /// Otherwise PinCode screen is presented for establishing a new connection.
     ///
@@ -117,8 +117,17 @@ class AssuranceSession {
     /// - Parameter assuranceEvent - an `AssuranceEvent` to be forwarded
     ///
     func sendEvent(_ assuranceEvent: AssuranceEvent) {
-        outboundQueue.enqueue(newElement: assuranceEvent)
-        outboundSource.add(data: 1)
+        if (assuranceEvent.size > 8) {
+            let chunkEvents = chunk(event: assuranceEvent)
+            for eachEvent in chunkEvents {
+                outboundQueue.enqueue(newElement: eachEvent)
+                outboundSource.add(data: 1)
+            }
+            return
+        } else {
+            outboundQueue.enqueue(newElement: assuranceEvent)
+            outboundSource.add(data: 1)
+        }
     }
 
     func handleConnectionError(error: AssuranceConnectionError, closeCode: Int?) {
@@ -188,4 +197,58 @@ class AssuranceSession {
         pluginHub.registerPlugin(PluginLogForwarder(), toSession: self)
     }
 
+    private func chunk(event: AssuranceEvent) -> [AssuranceEvent] {
+        var events: [AssuranceEvent] = []
+        
+        guard event.payload != nil else {
+            return events
+        }
+        
+        let chunkID = UUID().uuidString
+        
+        let encoder = JSONEncoder()
+         encoder.dateEncodingStrategy = .millisecondsSince1970
+        let data = (try? encoder.encode(event.payload)) ?? Data()
+        let dataLen = data.count
+        let chunkSize = (1024 * 4) // 8kB
+        let fullChunks = Int(dataLen / chunkSize)
+        let totalChunks = fullChunks + (dataLen % 1024 != 0 ? 1 : 0)
+
+//        let firstEvent = AssuranceEvent(type: event.type, payload: ["chunksId": AnyCodable.init(chunkID), "totalchunks" : AnyCodable.init(totalChunks)], timestamp: event.timestamp ?? Date(), vendor: event.vendor)
+//        events.append(firstEvent)
+        
+        var chunks:[Data] = [Data]()
+        for chunkCounter in 0..<totalChunks {
+          var chunk:Data
+          let chunkBase = chunkCounter * chunkSize
+          var diff = chunkSize
+          if(chunkCounter == totalChunks - 1) {
+            diff = dataLen - chunkBase
+          }
+
+          let range:Range<Data.Index> = chunkBase..<(chunkBase + diff)
+          chunk = data.subdata(in: range)
+          print("The size is \(chunk.count)")
+          let chunkSize = String(chunk.count) + " bytes"
+          let str = String(decoding: chunk, as: UTF8.self)
+            
+            //events.append(AssuranceEvent(type: AssuranceConstants.EventType.GENERIC, payload: , timestamp: event.timestamp ?? Date()))
+            
+            events.append(AssuranceEvent(type: event.type, payload: ["chunkData": AnyCodable.init(str)], timestamp: event.timestamp ?? Date(), metadata: ["chunkmetadata" : AnyCodable.init("lol")]))
+        }
+        return events
+    }
+
 }
+
+extension String {
+    func components(withMaxLength length: Int) -> [String] {
+        return stride(from: 0, to: self.count, by: length).map {
+            let start = self.index(self.startIndex, offsetBy: $0)
+            let end = self.index(start, offsetBy: length, limitedBy: self.endIndex) ?? self.endIndex
+            return String(self[start..<end])
+        }
+    }
+}
+
+

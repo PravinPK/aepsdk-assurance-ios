@@ -41,7 +41,7 @@ class PluginLogForwarder: AssurancePlugin {
         logPipe.fileHandleForReading.readabilityHandler = { [weak self] fileHandle in
             let data = fileHandle.availableData
             if let logLine = String(data: data, encoding: .utf8) {
-                self?.session?.sendEvent(AssuranceEvent(type: AssuranceConstants.EventType.LOG, payload: [AssuranceConstants.LogForwarding.LOG_LINE: AnyCodable.init(logLine)]))
+                self?.session?.sendEvent(AssuranceEvent(type: AssuranceConstants.EventType.LOG, payload: [AssuranceConstants.LogForwarding.LOG_LINE: AnyCodable.init(logLine)], metadata: nil))
             }
 
             /// writes log back to stderr

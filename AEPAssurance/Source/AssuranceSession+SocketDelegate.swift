@@ -70,7 +70,6 @@ extension AssuranceSession: SocketDelegate {
         // This is a non-retry error. Display the error back to user and close the connection.
         case AssuranceConstants.SocketCloseCode.DELETED_SESSSION:
             handleConnectionError(error: AssuranceConnectionError.deletedSession, closeCode: closeCode)
-            break
 
         // Events Limit : Close code 4400
         // This error is generically thrown if the client doesn't adhere to the protocol of the socket connection.

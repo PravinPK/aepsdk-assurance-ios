@@ -20,7 +20,7 @@ extension AssuranceSession {
     ///
     func sendClientInfoEvent() {
         Log.debug(label: AssuranceConstants.LOG_TAG, "Sending client info event to Assurance")
-        let clientEvent = AssuranceEvent.init(type: AssuranceConstants.EventType.CLIENT, payload: AssuranceClientInfo.getData())
+        let clientEvent = AssuranceEvent.init(type: AssuranceConstants.EventType.CLIENT, payload: AssuranceClientInfo.getData(), metadata: nil)
         self.socket.sendEvent(clientEvent)
     }
 

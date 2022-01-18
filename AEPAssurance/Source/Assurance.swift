@@ -381,6 +381,6 @@ public class Assurance: NSObject, Extension {
         payload[AssuranceConstants.ACPExtensionEventKey.SOURCE] = AnyCodable.init(EventSource.sharedState.lowercased())
         payload[AssuranceConstants.ACPExtensionEventKey.DATA] = [AssuranceConstants.EventDataKey.SHARED_STATE_OWNER: owner]
         payload[AssuranceConstants.PayloadKey.METADATA] = [stateType: stateContent]
-        return AssuranceEvent(type: AssuranceConstants.EventType.GENERIC, payload: payload)
+        return AssuranceEvent(type: AssuranceConstants.EventType.GENERIC, payload: payload, metadata: nil)
     }
 }
