@@ -25,6 +25,7 @@
 		337C8C135446B45550172205 /* Pods_TestAppObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FEAA724C29B9FAC154C0556 /* Pods_TestAppObjC.framework */; };
 		3FF4F5C8E96A31D0A6E896C4 /* Pods_TestApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C170474540581D23D5C489 /* Pods_TestApp.framework */; };
 		4A3445E6430F2FDC93CD6A1F /* Pods_UnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F7044D49EBAEA4F53647EF2 /* Pods_UnitTests.framework */; };
+		B601174727BC7AD8006D3968 /* AssuranceStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B601174627BC7AD8006D3968 /* AssuranceStateManager.swift */; };
 		B603F9FF27A9EC7D0033416B /* 20KBString.txt in Resources */ = {isa = PBXBuildFile; fileRef = B603F9FE27A9EC7D0033416B /* 20KBString.txt */; };
 		B603FA0427A9F51B0033416B /* 40KBString.txt in Resources */ = {isa = PBXBuildFile; fileRef = B603FA0327A9F51B0033416B /* 40KBString.txt */; };
 		B603FA0927AB1D270033416B /* htmlSample.txt in Resources */ = {isa = PBXBuildFile; fileRef = B603FA0827AB1D270033416B /* htmlSample.txt */; };
@@ -70,7 +71,6 @@
 		B676B7142681BB7C000EC291 /* AEPAssurance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6407199262C313E00C43183 /* AEPAssurance.framework */; };
 		B676B7152681BB7C000EC291 /* AEPAssurance.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B6407199262C313E00C43183 /* AEPAssurance.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B6A80BFE266ACBB60089C564 /* AssuranceShutDownTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A80BFD266ACBB50089C564 /* AssuranceShutDownTimerTests.swift */; };
-		B6AB2DE6263372AF00FE8AEA /* Assurance+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D2A92626334A3D0062AC5E /* Assurance+State.swift */; };
 		B6AB2DEE26337BB700FE8AEA /* MockDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AB2DED26337BB700FE8AEA /* MockDataStore.swift */; };
 		B6AB2DF326337BE700FE8AEA /* AssuranceStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AB2DF226337BE700FE8AEA /* AssuranceStateTests.swift */; };
 		B6AFD589263403EB00C63608 /* AssuranceEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AFD588263403EB00C63608 /* AssuranceEvent.swift */; };
@@ -200,6 +200,7 @@
 		493D855458BBA67C6F19F468 /* Pods-AEPAssurance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPAssurance.release.xcconfig"; path = "Target Support Files/Pods-AEPAssurance/Pods-AEPAssurance.release.xcconfig"; sourceTree = "<group>"; };
 		5ABE4461A8032C0B29C8BCF6 /* Pods-TestAppObjC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestAppObjC.debug.xcconfig"; path = "Target Support Files/Pods-TestAppObjC/Pods-TestAppObjC.debug.xcconfig"; sourceTree = "<group>"; };
 		96C170474540581D23D5C489 /* Pods_TestApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B601174627BC7AD8006D3968 /* AssuranceStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssuranceStateManager.swift; sourceTree = "<group>"; };
 		B603F9FE27A9EC7D0033416B /* 20KBString.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = 20KBString.txt; sourceTree = "<group>"; };
 		B603FA0327A9F51B0033416B /* 40KBString.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 40KBString.txt; sourceTree = "<group>"; };
 		B603FA0827AB1D270033416B /* htmlSample.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = htmlSample.txt; sourceTree = "<group>"; };
@@ -273,7 +274,6 @@
 		B6CECC662655A925000D517F /* ThreadSafeQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadSafeQueueTests.swift; sourceTree = "<group>"; };
 		B6D2A90B26322D1C0062AC5E /* AssuranceEnvironmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssuranceEnvironmentTests.swift; sourceTree = "<group>"; };
 		B6D2A91E2632B7640062AC5E /* MockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockExtension.swift; sourceTree = "<group>"; };
-		B6D2A92626334A3D0062AC5E /* Assurance+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Assurance+State.swift"; sourceTree = "<group>"; };
 		B6D6A014265D8836005042BE /* AssuranceClientInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssuranceClientInfo.swift; sourceTree = "<group>"; };
 		B6D6A016265D8863005042BE /* AssuranceClientInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssuranceClientInfoTests.swift; sourceTree = "<group>"; };
 		B6D6A01A265F027C005042BE /* AssuranceBlob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssuranceBlob.swift; sourceTree = "<group>"; };
@@ -450,7 +450,6 @@
 				B6407204262C90CD00C43183 /* Public */,
 				B640719C262C313E00C43183 /* AEPAssurance.h */,
 				B64071D2262C368C00C43183 /* Assurance.swift */,
-				B6D2A92626334A3D0062AC5E /* Assurance+State.swift */,
 				B6B0E2D6263C7FAB00EF5E21 /* AssuranceSession.swift */,
 				B63ADABD26732C8100A1281A /* AssuranceSession+EventHandler.swift */,
 				B63ADAB62672653200A1281A /* AssuranceSession+SocketDelegate.swift */,
@@ -461,6 +460,7 @@
 				B60BAC0B26434ED90054CD21 /* AssuranceConnectionError.swift */,
 				B6D6A014265D8836005042BE /* AssuranceClientInfo.swift */,
 				B6D6A01A265F027C005042BE /* AssuranceBlob.swift */,
+				B601174627BC7AD8006D3968 /* AssuranceStateManager.swift */,
 				B6D6A025265F9F14005042BE /* AssuranceUIUtil.swift */,
 				B640719D262C313E00C43183 /* Info.plist */,
 			);
@@ -981,7 +981,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd ${PROJECT_DIR}\nif which ./Pods/SwiftLint/swiftlint >/dev/null; then\n  ./Pods/SwiftLint/swiftlint\nelse\n  echo \"error: SwiftLint not installed, please run the pod install command from the project root directory.\"\nfi\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd ${PROJECT_DIR}\n#if which ./Pods/SwiftLint/swiftlint >/dev/null; then\n#  ./Pods/SwiftLint/swiftlint\n#else\n#  echo \"error: SwiftLint not installed, please run the pod install command from the project root directory.\"\n#fi\n";
 		};
 		879463ABBE56BFF38666F31D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1178,6 +1178,7 @@
 				B6B0E2C9263C674F00EF5E21 /* SessionAuthorizingUI.swift in Sources */,
 				B6FEB8B1263A18F500F0F240 /* InactiveIcon.swift in Sources */,
 				B60BAC0C26434ED90054CD21 /* AssuranceConnectionError.swift in Sources */,
+				B601174727BC7AD8006D3968 /* AssuranceStateManager.swift in Sources */,
 				B6B0E2CD263C709100EF5E21 /* iOSPinCodeScreen.swift in Sources */,
 				B6407206262C90FA00C43183 /* Assurance+PublicAPI.swift in Sources */,
 				B63ADAB5267262F600A1281A /* iOSStatusUI+FullScreenDelegate.swift in Sources */,
@@ -1189,7 +1190,6 @@
 				B6D6A0412660ED56005042BE /* NativeSocket.swift in Sources */,
 				B6D6A01B265F027C005042BE /* AssuranceBlob.swift in Sources */,
 				B63ADAB3267262DF00A1281A /* iOSStatusUI+FloatingButtonDelegate.swift in Sources */,
-				B6AB2DE6263372AF00FE8AEA /* Assurance+State.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,7 +15,7 @@ import Foundation
 
 class AssuranceSession {
     let RECONNECT_TIMEOUT = 5
-    let assuranceExtension: Assurance
+    let state: AssuranceStateManager
     var pinCodeScreen: SessionAuthorizingUI?
     let outboundQueue: ThreadSafeQueue = ThreadSafeQueue<AssuranceEvent>(withLimit: 200)
     let inboundQueue: ThreadSafeQueue = ThreadSafeQueue<AssuranceEvent>(withLimit: 200)
@@ -44,8 +44,8 @@ class AssuranceSession {
     var didClearBootEvent: Bool = false
 
     /// Initializer with instance of  `Assurance` extension
-    init(_ assuranceExtension: Assurance) {
-        self.assuranceExtension = assuranceExtension
+    init(_ state: AssuranceStateManager) {
+        self.state = state
         handleInBoundEvents()
         handleOutBoundEvents()
         registerInternalPlugins()
@@ -63,7 +63,7 @@ class AssuranceSession {
         }
 
         // if there is a socket URL already connected in the previous session, reuse it.
-        if let socketURL = assuranceExtension.connectedWebSocketURL {
+        if let socketURL = state.connectedWebSocketURL {
             self.statusUI.display()
             guard let url = URL(string: socketURL) else {
                 Log.warning(label: AssuranceConstants.LOG_TAG, "Invalid socket url. Ignoring to start new session.")
@@ -82,7 +82,7 @@ class AssuranceSession {
     ///
     /// Thread : Listener thread from EventHub
     func beginNewSession() {
-        let pinCodeScreen = iOSPinCodeScreen.init(withExtension: assuranceExtension)
+        let pinCodeScreen = iOSPinCodeScreen.init(withState: state)
         self.pinCodeScreen = pinCodeScreen
 
         // invoke the pinpad screen and create a socketURL with the pincode and other essential parameters
@@ -167,12 +167,12 @@ class AssuranceSession {
     /// Call this method when user terminates the Assurance session or when non-recoverable socket error occurs.
     ///
     func clearSessionData() {
-        assuranceExtension.clearState()
+        state.clearSharedState()
         canStartForwarding = false
         pluginHub.notifyPluginsOnSessionTerminated()
-        assuranceExtension.sessionId = nil
-        assuranceExtension.connectedWebSocketURL = nil
-        assuranceExtension.environment = AssuranceConstants.DEFAULT_ENVIRONMENT
+        state.sessionId = nil
+        state.connectedWebSocketURL = nil
+        state.environment = AssuranceConstants.DEFAULT_ENVIRONMENT
         pinCodeScreen = nil
     }
 

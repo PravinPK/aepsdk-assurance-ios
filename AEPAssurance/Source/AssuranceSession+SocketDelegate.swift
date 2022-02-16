@@ -86,7 +86,7 @@ extension AssuranceSession: SocketDelegate {
             pinCodeScreen?.connectionFailedWithError(AssuranceConnectionError.genericError)
 
             // do the reconnect logic only if session is already connected
-            guard let _ = assuranceExtension.connectedWebSocketURL else {
+            guard let _ = state.connectedWebSocketURL else {
                 return
             }
 
@@ -141,7 +141,7 @@ extension AssuranceSession: SocketDelegate {
     func webSocket(_ socket: SocketConnectable, didChangeState state: SocketState) {
         Log.debug(label: AssuranceConstants.LOG_TAG, "AssuranceSession: Socket state changed \(socket.socketState)")
         if state == .open {
-            assuranceExtension.connectedWebSocketURL = socket.socketURL?.absoluteString
+            self.state.connectedWebSocketURL = socket.socketURL?.absoluteString
         }
     }
 
