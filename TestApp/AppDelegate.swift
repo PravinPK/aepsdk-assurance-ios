@@ -22,6 +22,7 @@ import AEPPlaces
 import AEPSignal
 import AEPTarget
 import AEPUserProfile
+import AEPMessaging
 import UIKit
 
 @main
@@ -30,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         MobileCore.track(state: "Before SDK Init", data: nil)
-        MobileCore.setLogLevel(.debug)
+        MobileCore.setLogLevel(.trace)
         let extensions = [AEPIdentity.Identity.self,
                           Lifecycle.self,
                           Signal.self,
@@ -42,14 +43,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                           Consent.self,
                           UserProfile.self,
                           Assurance.self,
-                          Places.self
+                          Places.self,
+                          Optimize.self,
+                          Messaging.self
         ]
         MobileCore.registerExtensions(extensions, {
-            MobileCore.configureWith(appId: "")
+            MobileCore.configureWith(appId: "3149c49c3910/aaaac75639c6/launch-813b9d67d95e-development")
         })
         MobileCore.lifecycleStart(additionalContextData: nil)
 
-        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "056F3DD059CB22060A494021@AdobeOrg"])
+        // MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "056F3DD059CB22060A494021@AdobeOrg"])
         return true
     }
 

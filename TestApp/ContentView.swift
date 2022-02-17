@@ -54,7 +54,7 @@ struct YellowButtonStyle: ButtonStyle {
 }
 
 struct AssuranceCard: View {
-    @State private var assuranceURL: String = "assurance://?adb_validation_sessionid=72427e07-b526-4645-bf93-7dafb5c8309a&env=dev"
+    @State private var assuranceURL: String = "assurance://?adb_validation_sessionid=2d849456-b02e-43e2-936c-6ace964695d6"
     var body: some View {
         VStack {
             HStack {

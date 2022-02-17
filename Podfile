@@ -30,6 +30,8 @@ target 'TestApp' do
   pod 'AEPTarget'
   pod 'AEPAnalytics'
   pod 'AEPPlaces'
+  #pod 'AEPOptimize', :git => 'https://github.com/adobe/aepsdk-optimize-ios.git', :branch => 'dev'
+  pod 'AEPMessaging', :git => 'https://github.com/adobe/aepsdk-messaging-ios.git', :branch => 'staging'
 end
 
 target 'TestAppObjC' do
