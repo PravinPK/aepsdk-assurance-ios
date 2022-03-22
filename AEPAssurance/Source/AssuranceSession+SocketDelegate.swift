@@ -22,6 +22,7 @@ extension AssuranceSession: SocketDelegate {
     ///
     func webSocketDidConnect(_ socket: SocketConnectable) {
         Log.debug(label: AssuranceConstants.LOG_TAG, "Assurance session successfully connected.")
+        presentation.onSessionConnected()
         self.sendClientInfoEvent()
     }
 
@@ -35,7 +36,7 @@ extension AssuranceSession: SocketDelegate {
     func webSocketDidDisconnect(_ socket: SocketConnectable, _ closeCode: Int, _ reason: String, _ wasClean: Bool) {
 
         // Adding client log so user knows the reason for disconnection
-        statusUI.addClientLog("Assurance Session disconnected : <br> &emsp; close code: \(closeCode) <br> &emsp; reason: \(reason) <br> &emsp; isClean : \(wasClean) ", visibility: .low)
+        presentation.addClientLog("Assurance Session disconnected : <br> &emsp; close code: \(closeCode) <br> &emsp; reason: \(reason) <br> &emsp; isClean : \(wasClean) ", visibility: .low)
 
         switch closeCode {
 
@@ -44,8 +45,7 @@ extension AssuranceSession: SocketDelegate {
         // notify plugin on normal closure
         case AssuranceConstants.SocketCloseCode.NORMAL_CLOSURE:
             Log.debug(label: AssuranceConstants.LOG_TAG, "Socket disconnected successfully with close code \(closeCode). Normal closure of websocket.")
-            pinCodeScreen?.connectionFinished()
-            statusUI.remove()
+            presentation.onSessionDisconnected()
             pluginHub.notifyPluginsOnDisconnect(withCloseCode: closeCode)
 
         // ORG Mismatch : Close code 4900
@@ -85,7 +85,7 @@ extension AssuranceSession: SocketDelegate {
         // For all other abnormal closures, display error back to UI and attempt to reconnect.
         default:
             Log.debug(label: AssuranceConstants.LOG_TAG, "Abnormal closure of webSocket. Reason - \(reason) and closeCode - \(closeCode)")
-            pinCodeScreen?.connectionFailedWithError(AssuranceConnectionError.genericError)
+            presentation.onSessionConnectionError(error: AssuranceConnectionError.genericError)
 
             // do the reconnect logic only if session is already connected
             guard let _ = stateManager.connectedWebSocketURL else {
@@ -105,7 +105,7 @@ extension AssuranceSession: SocketDelegate {
             if !isAttemptingToReconnect {
                 isAttemptingToReconnect = true
                 canStartForwarding = false // set this to false so that all the events are held up until client event is sent after successful reconnect
-                statusUI.updateForSocketInActive()
+                presentation.onSessionReconnecting()
                 pluginHub.notifyPluginsOnDisconnect(withCloseCode: closeCode)
             }
 

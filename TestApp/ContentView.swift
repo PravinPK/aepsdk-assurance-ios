@@ -54,7 +54,7 @@ struct YellowButtonStyle: ButtonStyle {
 }
 
 struct AssuranceCard: View {
-    @State private var assuranceURL: String = "griffon://?adb_validation_sessionid=c0857675-4bab-4990-ba40-8781b10b415a"
+    @State private var assuranceURL: String = "griffon://?adb_validation_sessionid=c02d7f6f-c6fc-4c58-bbad-72d7f0c27f26"
     var body: some View {
         VStack {
             HStack {
@@ -228,7 +228,7 @@ struct BigEventsCard: View {
                 }).buttonStyle(YellowButtonStyle()).padding()
                 Button(action: {
                     let path = Bundle.main.path(forResource: "sampleRules", ofType: "json")
-                    guard let sampleJson = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) else {
+                    guard let sampleJson = try? String(contentsOfFile: path ?? "", encoding: String.Encoding.utf8) else {
                         return
                     }
                     do {

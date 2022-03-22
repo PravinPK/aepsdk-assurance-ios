@@ -26,20 +26,20 @@ public class Assurance: NSObject, Extension {
     public var metadata: [String: String]?
     public var runtime: ExtensionRuntime
 
-    var assuranceSession: AssuranceSession?
     var timer: DispatchSourceTimer?
+
     let stateManager: AssuranceStateManager
+    let sessionOrchestrator: AssuranceSessionOrchestrator
 
     public func onRegistered() {
         registerListener(type: EventType.wildcard, source: EventSource.wildcard, listener: handleWildcardEvent)
-        self.assuranceSession = AssuranceSession(stateManager)
 
         /// if the Assurance session was already connected in the previous app session, go ahead and reconnect socket
         /// and do not turn on the unregister timer
         if stateManager.connectedWebSocketURL != nil {
             stateManager.shareAssuranceState()
             Log.trace(label: AssuranceConstants.LOG_TAG, "Assurance Session was already connected during previous app launch. Attempting to reconnect. URL : \(String(describing: stateManager.connectedWebSocketURL))")
-            assuranceSession?.startSession()
+            sessionOrchestrator.createSession()
             return
         }
 
@@ -53,13 +53,15 @@ public class Assurance: NSObject, Extension {
         self.runtime = runtime
         self.shutdownTime = AssuranceConstants.SHUTDOWN_TIME
         self.stateManager = AssuranceStateManager(runtime)
+        self.sessionOrchestrator = AssuranceSessionOrchestrator(stateManager: stateManager)
     }
 
     /// Initializer for testing purposes to mock the shut down time .
-    init?(runtime: ExtensionRuntime, shutdownTime: Int, stateManager: AssuranceStateManager) {
+    init?(runtime: ExtensionRuntime, shutdownTime: Int, stateManager: AssuranceStateManager, sessionOrchestrator: AssuranceSessionOrchestrator) {
         self.runtime = runtime
         self.shutdownTime = shutdownTime
         self.stateManager = stateManager
+        self.sessionOrchestrator = sessionOrchestrator
     }
 
     public func readyForEvent(_ event: Event) -> Bool {
@@ -76,8 +78,9 @@ public class Assurance: NSObject, Extension {
         if event.isAssuranceRequestContent {
             handleAssuranceRequestContent(event: event)
         }
-
-        guard let session = assuranceSession, session.canProcessSDKEvents else {
+    
+        
+        if !(sessionOrchestrator.getActiveSession() != nil || sessionOrchestrator.outboundQueue != nil) {
             return
         }
 
@@ -88,7 +91,7 @@ public class Assurance: NSObject, Extension {
 
         // forward all events to Assurance session
         let assuranceEvent = AssuranceEvent.from(event: event)
-        session.sendEvent(assuranceEvent)
+        sessionOrchestrator.sendEvent(assuranceEvent)
 
         if event.isPlacesRequestEvent {
             handlePlacesRequest(event: event)
@@ -132,7 +135,7 @@ public class Assurance: NSObject, Extension {
         stateManager.shareAssuranceState()
 
         Log.trace(label: AssuranceConstants.LOG_TAG, "Received sessionID, Initializing Assurance session. \(sessionId)")
-        assuranceSession?.startSession()
+        sessionOrchestrator.createSession()
     }
 
     // MARK: Places event handlers
@@ -143,9 +146,9 @@ public class Assurance: NSObject, Extension {
     ///     - event - a mobileCore's places request event
     private func handlePlacesRequest(event: Event) {
         if event.isRequestNearByPOIEvent {
-            assuranceSession?.addClientLog("Places - Requesting \(event.poiCount) nearby POIs from (\(event.latitude), \(event.longitude))", visibility: .normal)
+            sessionOrchestrator.getActiveSession()?.addClientLog("Places - Requesting \(event.poiCount) nearby POIs from (\(event.latitude), \(event.longitude))", visibility: .normal)
         } else if event.isRequestResetEvent {
-            assuranceSession?.addClientLog("Places - Resetting location", visibility: .normal)
+            sessionOrchestrator.getActiveSession()?.addClientLog("Places - Resetting location", visibility: .normal)
         }
     }
 
@@ -155,16 +158,16 @@ public class Assurance: NSObject, Extension {
     ///     - event - a mobileCore's places response event
     private func handlePlacesResponse(event: Event) {
         if event.isResponseRegionEvent {
-            assuranceSession?.addClientLog("Places - Processed \(event.regionEventType) for region \(event.regionName).", visibility: .normal)
+            sessionOrchestrator.getActiveSession()?.addClientLog("Places - Processed \(event.regionEventType) for region \(event.regionName).", visibility: .normal)
         } else if event.isResponseNearByEvent {
             let nearByPOIs = event.nearByPOIs
             for poi in nearByPOIs {
                 guard let poiDictionary = poi as? [String: Any] else {
                     return
                 }
-                assuranceSession?.addClientLog("\t  \(poiDictionary["regionname"] as? String ?? "Unknown")", visibility: .high)
+                sessionOrchestrator.getActiveSession()?.addClientLog("\t  \(poiDictionary["regionname"] as? String ?? "Unknown")", visibility: .high)
             }
-            assuranceSession?.addClientLog("Places - Found \(nearByPOIs.count) nearby POIs\(!nearByPOIs.isEmpty ? " :" : ".")", visibility: .high)
+            sessionOrchestrator.getActiveSession()?.addClientLog("Places - Found \(nearByPOIs.count) nearby POIs\(!nearByPOIs.isEmpty ? " :" : ".")", visibility: .high)
         }
     }
 
@@ -207,7 +210,7 @@ public class Assurance: NSObject, Extension {
         let sharedStatePayload = [sharedContentKey: sharedState.value]
         var assuranceEvent = AssuranceEvent.from(event: event)
         assuranceEvent.payload?.updateValue(AnyCodable.init(sharedStatePayload), forKey: AssuranceConstants.PayloadKey.METADATA)
-        assuranceSession?.sendEvent(assuranceEvent)
+        sessionOrchestrator.sendEvent(assuranceEvent)
     }
 
     // MARK: Shutdown timer methods
@@ -229,7 +232,9 @@ public class Assurance: NSObject, Extension {
         Log.debug(label: AssuranceConstants.LOG_TAG, "Timeout - Assurance extension did not receive session url. Shutting down from processing any further events.")
         invalidateTimer()
         Log.debug(label: AssuranceConstants.LOG_TAG, "Clearing the queued events and purging Assurance shared state.")
-        self.assuranceSession?.shutDownSession()
+        // todo : comeback here
+        // self.assuranceSession?.shutDownSession()
+        sessionOrchestrator.shutDownAssurance()
         stateManager.clearAssuranceState()
     }
 

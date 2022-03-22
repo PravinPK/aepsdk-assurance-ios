@@ -16,23 +16,20 @@ import Foundation
 class AssuranceSession {
     let RECONNECT_TIMEOUT = 5
     let stateManager: AssuranceStateManager
-    var pinCodeScreen: SessionAuthorizingUI?
+    let sessionOrchestrator: AssuranceSessionOrchestrator
     let outboundQueue: ThreadSafeQueue = ThreadSafeQueue<AssuranceEvent>(withLimit: 200)
     let inboundQueue: ThreadSafeQueue = ThreadSafeQueue<AssuranceEvent>(withLimit: 200)
     let inboundSource: DispatchSourceUserDataAdd = DispatchSource.makeUserDataAddSource(queue: DispatchQueue.global(qos: .default))
     let outboundSource: DispatchSourceUserDataAdd = DispatchSource.makeUserDataAddSource(queue: DispatchQueue.global(qos: .default))
     let pluginHub: PluginHub = PluginHub()
-
+    private let presentation: AssurancePresentation
     lazy var socket: SocketConnectable  = {
         return WebViewSocket(withDelegate: self)
     }()
-
-    lazy var statusUI: iOSStatusUI  = {
-        iOSStatusUI.init(withSession: self)
-    }()
+    
 
     // MARK: - boolean flags
-
+    
     /// indicates if the session is currently attempting to reconnect. This flag is set when the session disconnects due to some retry-able reason,
     /// This flag is reset when the session is connected or successfully terminated
     var isAttemptingToReconnect: Bool = false
@@ -54,10 +51,17 @@ class AssuranceSession {
     /// new AssuranceSession for each new socket connection and making the AssuranceExtension rely
     /// on the existence of a session for inferring event processing.
     var canProcessSDKEvents: Bool = true
+    
 
     /// Initializer with instance of  `Assurance` extension
-    init(_ stateManager: AssuranceStateManager) {
+    init(_ stateManager: AssuranceStateManager, _ sessionOrchestrator: AssuranceSessionOrchestrator, buffer: ThreadSafeQueue<AssuranceEvent>) {
         self.stateManager = stateManager
+        self.sessionOrchestrator = sessionOrchestrator
+        if (buffer == nil) {
+            didClearBootEvent = true
+        }
+        self.outboundQueue = buffer
+        presentation = AssurancePresentation(stateManager: stateManager, sessionOrchestrator: sessionOrchestrator)
         handleInBoundEvents()
         handleOutBoundEvents()
         registerInternalPlugins()
@@ -78,7 +82,7 @@ class AssuranceSession {
 
         // if there is a socket URL already connected in the previous session, reuse it.
         if let socketURL = stateManager.connectedWebSocketURL {
-            self.statusUI.display()
+            self.presentation.statusUI.display()
             guard let url = URL(string: socketURL) else {
                 Log.warning(label: AssuranceConstants.LOG_TAG, "Invalid socket url. Ignoring to start new session.")
                 return
@@ -96,26 +100,7 @@ class AssuranceSession {
     ///
     /// Thread : Listener thread from EventHub
     func beginNewSession() {
-        let pinCodeScreen = iOSPinCodeScreen.init(withState: stateManager)
-        self.pinCodeScreen = pinCodeScreen
-
-        // invoke the pinpad screen and create a socketURL with the pincode and other essential parameters
-        pinCodeScreen.show(callback: { [weak self]  socketURL, error in
-            if let error = error {
-                self?.handleConnectionError(error: error, closeCode: -1)
-                return
-            }
-
-            guard let socketURL = socketURL else {
-                Log.debug(label: AssuranceConstants.LOG_TAG, "SocketURL to connect to session is empty. Ignoring to start Assurance session.")
-                return
-            }
-
-            // Thread : main thread (this callback is called from `overrideUrlLoad` method of WKWebView)
-            Log.debug(label: AssuranceConstants.LOG_TAG, "Attempting to make a socket connection with URL : \(socketURL)")
-            self?.socket.connect(withUrl: socketURL)
-            pinCodeScreen.connectionInitialized()
-        })
+        presentation.onSessionInitialized()
     }
 
     ///
@@ -143,20 +128,13 @@ class AssuranceSession {
     func handleConnectionError(error: AssuranceConnectionError, closeCode: Int) {
         // if the pinCode screen is still being displayed. Then use the same webView to display error
         Log.debug(label: AssuranceConstants.LOG_TAG, "Socket disconnected with error :\(error.info.name) \n description : \(error.info.description) \n close code: \(closeCode)")
-        if pinCodeScreen?.isDisplayed == true {
-            pinCodeScreen?.connectionFailedWithError(error)
-        } else {
-            let errorView = ErrorView.init(AssuranceConnectionError.clientError)
-            errorView.display()
-        }
-
+        
+        presentation.onSessionConnectionError(error: error)
         pluginHub.notifyPluginsOnDisconnect(withCloseCode: closeCode)
 
         // since we don't give retry option for these errors and UI will be dismissed anyway, hence notify plugins for onSessionTerminated
         if !error.info.shouldRetry {
             clearSessionData()
-            statusUI.remove()
-            pluginHub.notifyPluginsOnSessionTerminated()
         }
     }
 
@@ -167,18 +145,17 @@ class AssuranceSession {
     ///     - visibility: an `AssuranceClientLogVisibility` determining the importance of the log message
     ///
     func addClientLog(_ message: String, visibility: AssuranceClientLogVisibility) {
-        statusUI.addClientLog(message, visibility: visibility)
+        presentation.addClientLog(message, visibility: visibility)
     }
 
-    ///
-    /// Clears the queued SDK events from memory. Call this method once Assurance shut down timer is triggered.
-    ///
-    func shutDownSession() {
-        inboundQueue.clear()
-        outboundQueue.clear()
-        didClearBootEvent = true
-        canProcessSDKEvents = false
-    }
+    //    ///
+    //    /// Clears the queued SDK events from memory. Call this method once Assurance shut down timer is triggered.
+    //    ///
+    //    func shutDownSession() {
+    //        inboundQueue.clear()
+    //        outboundQueue.clear()
+    //        canProcessSDKEvents = false
+    //    }
 
     ///
     /// Clears all the data related to the current Assurance Session.
@@ -191,7 +168,6 @@ class AssuranceSession {
         stateManager.sessionId = nil
         stateManager.connectedWebSocketURL = nil
         stateManager.environment = AssuranceConstants.DEFAULT_ENVIRONMENT
-        pinCodeScreen = nil
     }
 
     // MARK: - Private methods
