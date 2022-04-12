@@ -17,19 +17,18 @@ class AssuranceSession {
     let RECONNECT_TIMEOUT = 5
     let stateManager: AssuranceStateManager
     let sessionOrchestrator: AssuranceSessionOrchestrator
-    let outboundQueue: ThreadSafeQueue = ThreadSafeQueue<AssuranceEvent>(withLimit: 200)
+    let outboundQueue: ThreadSafeQueue<AssuranceEvent>
     let inboundQueue: ThreadSafeQueue = ThreadSafeQueue<AssuranceEvent>(withLimit: 200)
     let inboundSource: DispatchSourceUserDataAdd = DispatchSource.makeUserDataAddSource(queue: DispatchQueue.global(qos: .default))
     let outboundSource: DispatchSourceUserDataAdd = DispatchSource.makeUserDataAddSource(queue: DispatchQueue.global(qos: .default))
     let pluginHub: PluginHub = PluginHub()
-    private let presentation: AssurancePresentation
+    let presentation: AssurancePresentation
     lazy var socket: SocketConnectable  = {
         return WebViewSocket(withDelegate: self)
     }()
-    
 
     // MARK: - boolean flags
-    
+
     /// indicates if the session is currently attempting to reconnect. This flag is set when the session disconnects due to some retry-able reason,
     /// This flag is reset when the session is connected or successfully terminated
     var isAttemptingToReconnect: Bool = false
@@ -51,16 +50,18 @@ class AssuranceSession {
     /// new AssuranceSession for each new socket connection and making the AssuranceExtension rely
     /// on the existence of a session for inferring event processing.
     var canProcessSDKEvents: Bool = true
-    
 
     /// Initializer with instance of  `Assurance` extension
-    init(_ stateManager: AssuranceStateManager, _ sessionOrchestrator: AssuranceSessionOrchestrator, buffer: ThreadSafeQueue<AssuranceEvent>) {
+    init(_ stateManager: AssuranceStateManager, _ sessionOrchestrator: AssuranceSessionOrchestrator,_ eventBuffer: ThreadSafeQueue<AssuranceEvent>?) {
         self.stateManager = stateManager
         self.sessionOrchestrator = sessionOrchestrator
-        if (buffer == nil) {
+        
+        if let eventBuffer = eventBuffer {
+            self.outboundQueue = eventBuffer
+        } else {
+            self.outboundQueue = ThreadSafeQueue<AssuranceEvent>(withLimit: 200)
             didClearBootEvent = true
         }
-        self.outboundQueue = buffer
         presentation = AssurancePresentation(stateManager: stateManager, sessionOrchestrator: sessionOrchestrator)
         handleInBoundEvents()
         handleOutBoundEvents()
@@ -123,12 +124,12 @@ class AssuranceSession {
 
     /// Handles the Assurance socket connection error by showing the appropriate UI to the user.
     /// - Parameters:
-    ///   - error: The `AssurancConnectionError` representing the error
+    ///   - error: The `AssuranceConnectionError` representing the error
     ///   - closeCode: close code defining the reason for socket closure.
     func handleConnectionError(error: AssuranceConnectionError, closeCode: Int) {
         // if the pinCode screen is still being displayed. Then use the same webView to display error
         Log.debug(label: AssuranceConstants.LOG_TAG, "Socket disconnected with error :\(error.info.name) \n description : \(error.info.description) \n close code: \(closeCode)")
-        
+
         presentation.onSessionConnectionError(error: error)
         pluginHub.notifyPluginsOnDisconnect(withCloseCode: closeCode)
 

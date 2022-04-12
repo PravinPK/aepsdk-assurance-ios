@@ -78,9 +78,8 @@ public class Assurance: NSObject, Extension {
         if event.isAssuranceRequestContent {
             handleAssuranceRequestContent(event: event)
         }
-    
-        
-        if !(sessionOrchestrator.getActiveSession() != nil || sessionOrchestrator.outboundQueue != nil) {
+
+        if !(sessionOrchestrator.getActiveSession() != nil || sessionOrchestrator.eventQueue != nil) {
             return
         }
 

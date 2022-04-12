@@ -22,7 +22,7 @@ class ThreadSafeQueue<T> {
     init(withLimit  limit: Int) {
         self.limit = limit
     }
-
+    
     /// Appends the specified element to the end of this queue.
     /// If the queue has reached its limit then the first element of the queue is removed
     func enqueue(newElement: T) {
@@ -47,4 +47,6 @@ class ThreadSafeQueue<T> {
     func clear() {
         self.array.clear()
     }
+    
+    
 }

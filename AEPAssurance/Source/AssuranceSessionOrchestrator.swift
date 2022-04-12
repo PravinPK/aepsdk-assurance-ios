@@ -14,15 +14,13 @@ import Foundation
 
 class AssuranceSessionOrchestrator: AssurancePresentationDelegate {
 
-    var outboundQueue: ThreadSafeQueue<AssuranceEvent>?
+    /// A queue to hold the captured AssuranceEvent's before a session is connected.
+    /// A nil value on this queue indicates that the AssuranceExtension is shut down or terminated
+    var eventQueue: ThreadSafeQueue<AssuranceEvent>?
     let stateManager: AssuranceStateManager
     var session: AssuranceSession?
-
-    /// true indicates Assurance SDK has timeout and shutdown after non-reception of deep link URL because of which it has cleared all the queued initial SDK events from memory.
-    //var didShutDown: Bool = false
-
     init(stateManager: AssuranceStateManager) {
-        outboundQueue = ThreadSafeQueue<AssuranceEvent>(withLimit: 200)
+        eventQueue = ThreadSafeQueue<AssuranceEvent>(withLimit: 200)
         self.stateManager = stateManager
     }
 
@@ -31,44 +29,41 @@ class AssuranceSessionOrchestrator: AssurancePresentationDelegate {
             Log.debug(label: AssuranceConstants.LOG_TAG, "There is already an ongoing Assurance session. Ignoring to start new session.")
             return
         }
-        
-        //didShutDown = false
 
-        session = AssuranceSession(stateManager, self, outboundEventQueue: outboundQueue ?? <#default value#>)
-        outboundQueue = nil
+        session = AssuranceSession(stateManager, self, eventQueue)
+        eventQueue = nil
         session?.startSession()
     }
 
     func sendEvent(_ assuranceEvent: AssuranceEvent) {
-        guard let session = session else {
-            session?.sendEvent(assuranceEvent)
-            return
-        }
         
-        guard let outboundQueue = outboundQueue else {
-            outboundQueue.enqueue(newElement: assuranceEvent)
-            processQueuedOutBoundEvents()
-            return
-        }
-        
-        // not alive
-    }
-
-    private func processQueuedOutBoundEvents() {
-        guard let unwrappedSession = session else {
+        /// If there is an ongoing session, queue the event directly to that session
+        if let session = session {
+            session.sendEvent(assuranceEvent)
             return
         }
 
-        while self.outboundQueue.size() > 0 {
-            let event = self.outboundQueue.dequeue()
-            if let event = event {
-                unwrappedSession.sendEvent(event)
-            }
+        guard let eventQueue = eventQueue else {
+            return
         }
+        eventQueue.enqueue(newElement: assuranceEvent)
     }
-    
+
+//    private func processQueuedOutBoundEvents() {
+//        guard let unwrappedSession = session else {
+//            return
+//        }
+//
+//        while self.eventQueue.size() > 0 {
+//            let event = self.eventQueue.dequeue()
+//            if let event = event {
+//                    unwrappedSession.sendEvent(event)
+//                }
+//            }
+//    }
+
     func canProcessSDKEvents() {
-        
+
     }
 
     ///
@@ -86,6 +81,7 @@ class AssuranceSessionOrchestrator: AssurancePresentationDelegate {
         return session
     }
 
+    // MARK: - AssurancePresentationDelegate methods
     func onPinConfirmation(_ url: URL) {
         session?.socket.connect(withUrl: url)
     }
@@ -93,11 +89,21 @@ class AssuranceSessionOrchestrator: AssurancePresentationDelegate {
     func onDisconnect() {
         clearActiveSession()
     }
-    
+
+    // MARK: - Private methods
     private func clearActiveSession() {
         session?.terminateSession()
         session = nil
-        outboundQueue = nil
+        eventQueue = nil
     }
 
 }
+
+
+//extension ThreadSafeQueue<T> {
+//
+//    /// Removes all of the elements from this queue.
+//    func copy() -> ThreadSafeQueue<T> {
+//        ThreadSafeQueue(
+//    }
+//}
