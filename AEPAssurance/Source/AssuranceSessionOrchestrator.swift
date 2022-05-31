@@ -20,8 +20,8 @@ import Foundation
 class AssuranceSessionOrchestrator: AssurancePresentationDelegate {
 
     /// Dispatch queue to synchronize the operations over a session
-    /// QOS  is userInteractive, they highest priority on the system.
-    /// Hence they can process the UI button clicks immediately and attempts to connect to socket and dismiss the UI
+    /// QOS is userInteractive, they have highest priority on the system.
+    /// Henceforth we can process the UI button clicks immediately and attempts to connect to socket and dismiss the UI
     let sessionOperationQueue = DispatchQueue(label: "com.adobe.assurance.session.queue", qos: .userInteractive)
 
     let stateManager: AssuranceStateManager
@@ -76,7 +76,7 @@ class AssuranceSessionOrchestrator: AssurancePresentationDelegate {
     /// Dissolve the active session (if one exists) and its associated states.
     ///
     /// Thread: Called from main thread when `Cancel` or `Disconnect` button is tapped.
-    ///       Called from the background shutDownTimer after the 5 second timeout
+    ///       Called from the background shutDownTimer thread after the 5 second timeout.
     func terminateSession() {
         hasEverTerminated = true
         self.outboundEventBuffer = nil

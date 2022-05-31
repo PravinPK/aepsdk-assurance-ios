@@ -49,7 +49,7 @@ class AssuranceSession {
     ///    - sessionOrchestrator: an orchestrating component that manages this session
     ///    - outboundEvents: events that are queued before this session is initiated
     ///
-    ///  Thread :  dispatch from session orderer queue. See sessionOrchestrator
+    /// Thread :  dispatched from sessionOperationQueue. See AssuranceSessionOrchestrator.
     init(sessionDetails: AssuranceSessionDetails, stateManager: AssuranceStateManager, sessionOrchestrator: AssuranceSessionOrchestrator, outboundEvents: ThreadSafeArray<AssuranceEvent>?) {
         self.sessionDetails = sessionDetails
         self.stateManager = stateManager
@@ -72,7 +72,7 @@ class AssuranceSession {
     /// If the sessionDetails is not authenticated (doesn't have pin or orgId), it triggers the presentation to launch the pinCode screen
     /// If the sessionDetails is already authenticated, then connects directly without pin prompt.
     ///
-    /// Thread :  dispatch from session orderer queue. See sessionOrchestrator
+    /// Thread :  dispatched from sessionOperationQueue. See AssuranceSessionOrchestrator.
     func startSession() {
         if socket.socketState == .open || socket.socketState == .connecting {
             Log.debug(label: AssuranceConstants.LOG_TAG, "There is already an ongoing Assurance session. Ignoring to start new session.")
@@ -93,7 +93,7 @@ class AssuranceSession {
     ///
     /// Terminates the ongoing Assurance session.
     ///
-    /// Thread :  dispatch from session orderer queue. See sessionOrchestrator
+    /// Thread :  dispatched from sessionOperationQueue. See AssuranceSessionOrchestrator.
     func disconnect() {
         socket.disconnect()
         clearSessionData()
@@ -103,7 +103,7 @@ class AssuranceSession {
     /// Sends the `AssuranceEvent` to the connected session.
     /// - Parameter assuranceEvent - an `AssuranceEvent` to be forwarded
     ///
-    /// Thread :  dispatch from session orderer queue. See sessionOrchestrator
+    /// Thread :  dispatched from sessionOperationQueue. See AssuranceSessionOrchestrator.
     func sendEvent(_ assuranceEvent: AssuranceEvent) {
         outboundQueue.enqueue(newElement: assuranceEvent)
         outboundSource.add(data: 1)
