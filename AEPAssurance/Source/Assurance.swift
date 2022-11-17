@@ -30,6 +30,7 @@ public class Assurance: NSObject, Extension {
     var shutdownTime: TimeInterval /// Time before which Assurance extension shuts down on non receipt of start session event.
     var stateManager: AssuranceStateManager
     var sessionOrchestrator: AssuranceSessionOrchestrator
+    var quickConnectManager: QuickConnectManager?
     #else
     let shutdownTime: TimeInterval
     let stateManager: AssuranceStateManager
@@ -54,6 +55,7 @@ public class Assurance: NSObject, Extension {
             }
         }
 
+        quickConnectManager = QuickConnectManager(assurance: self)
         /// if the Assurance session is not previously connected, turn on 5 sec timer to wait for Assurance deeplink
         startShutDownTimer()
     }
@@ -118,10 +120,44 @@ public class Assurance: NSObject, Extension {
     /// - event - a AssuranceRequestContent event with deeplink data
     private func handleAssuranceRequestContent(event: Event) {
         /// early bail out if eventData is nil
+        
         guard let startSessionData = event.data else {
+            #if DEBUG
+            if event.name == "QuickConnectStart" {
+                invalidateTimer()
+                startEvents()
+                quickConnectManager?.startQuickConnectSession( withCallback: { [self] result in
+                    switch result {
+                        
+                        // Handle Success URL
+                        case .success(let url):
+                        do {
+                            let sessionDetails = try AssuranceSessionDetails(withURLString: url.absoluteString)
+                            sessionOrchestrator.createSession(withDetails: sessionDetails)
+                            return
+                            } catch {
+                            Log.warning(label: AssuranceConstants.LOG_TAG, "Ignoring to reconnect to already connected session. Invalid socket url.  URL : \(String(describing: url)) Error Message: \(error.localizedDescription)")
+                            }
+                            break
+                                                
+                        
+                        // Handle failed to quickConnect with QuickConnectError
+                        case .failure(let error):
+                        Log.debug(label: AssuranceConstants.LOG_TAG, "Error")
+                        stopEvents()
+                    }
+                })
+                return
+            }
+            #endif
             Log.debug(label: AssuranceConstants.LOG_TAG, "Assurance start session event received with empty data. Dropping event.")
             return
         }
+        
+//        guard let startSessionData = event.data else {
+//            Log.debug(label: AssuranceConstants.LOG_TAG, "Assurance start session event received with empty data. Dropping event.")
+//            return
+//        }
 
         guard let deeplinkUrlString = startSessionData[AssuranceConstants.EventDataKey.START_SESSION_URL] as? String else {
             Log.debug(label: AssuranceConstants.LOG_TAG, "Assurance start session event received with no deeplink url. Dropping event.")
@@ -246,6 +282,7 @@ public class Assurance: NSObject, Extension {
         invalidateTimer()
         Log.debug(label: AssuranceConstants.LOG_TAG, "Clearing the queued events and purging Assurance shared state.")
         sessionOrchestrator.terminateSession()
+        stopEvents()
     }
 
     /// Invalidate the ongoing timer and cleans it from memory

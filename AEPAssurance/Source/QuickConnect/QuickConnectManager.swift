@@ -13,25 +13,32 @@
 import Foundation
 import UIKit
 
-class QuickConnectManager {
+struct QuickConnectionError: Error {
+    let message: String
+}
 
+class QuickConnectManager {
+    typealias QuickConnectCallback = ((Result< URL, QuickConnectionError>) -> Void)
+    
     private let quickConnectService = QuickConnectService()
     private lazy var quickConnectView = QuickConnectView(manager: self)
     private let parentExtension: Assurance
+    private var quickConnectCallback : QuickConnectCallback?
 
     init(assurance: Assurance) {
         parentExtension = assurance
     }
+    
 
-    func detectShakeGesture() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleShakeGesture),
-                                               name: NSNotification.Name(AssuranceConstants.QuickConnect.SHAKE_NOTIFICATION_KEY),
-                                               object: nil)
+    func startQuickConnectSession(withCallback callback: @escaping QuickConnectCallback) {
+        quickConnectCallback = callback
+        DispatchQueue.main.async {
+             self.quickConnectView.show()
+        }
     }
     
     func createDevice() {
-        quickConnectService.registerDevice(clientID: parentExtension.clientID, orgID: parentExtension.getURLEncodedOrgID() ?? "changeme", callback: { result in
+        quickConnectService.registerDevice(clientID: parentExtension.stateManager.clientID, orgID: parentExtension.stateManager.getURLEncodedOrgID() ?? "changeme", callback: { result in
              
              switch result {
              case .success(_):
@@ -47,11 +54,11 @@ class QuickConnectManager {
     
     func checkDeviceStatus() {
         
-        guard let orgID = parentExtension.getURLEncodedOrgID() else {
+        guard let orgID = parentExtension.stateManager.getURLEncodedOrgID() else {
             // log here
             return
         }
-        quickConnectService.getDeviceStatus(clientID: parentExtension.clientID, orgID: orgID, callback: { [self] result in
+        quickConnectService.getDeviceStatus(clientID: parentExtension.stateManager.clientID, orgID: orgID, callback: { [self] result in
             switch result {
             case .success((let sessionId, let token)):
                 
@@ -59,17 +66,17 @@ class QuickConnectManager {
                 self.quickConnectView.onSuccessfulApproval()
                 //wss://connect%@.griffon.adobe.com/client/v1?sessionId=%@&token=%@&orgId=%@&clientId=%@
                 let socketURL = String(format: AssuranceConstants.BASE_SOCKET_URL,
-                                       self.parentExtension.environment.urlFormat,
+                                       AssuranceEnvironment.prod.urlFormat,
                                        sessionId,
                                        token,
                                        orgID,
-                                       self.parentExtension.clientID)
+                                       self.parentExtension.stateManager.clientID)
 
                 guard let url = URL(string: socketURL) else {
                     return
                 }
                 
-                self.parentExtension.assuranceSession?.connectToSocketWith(url: url)
+                quickConnectCallback!(.success(url))
                 break
             case .failure(_):
                 self.quickConnectView.onFailedApproval()
@@ -81,12 +88,12 @@ class QuickConnectManager {
     }
     
     func deleteDevice() {
-        guard let orgID = parentExtension.getURLEncodedOrgID() else {
+        guard let orgID = parentExtension.stateManager.getURLEncodedOrgID() else {
             // log here
             return
         }
         
-        quickConnectService.deleteDevice(clientID: parentExtension.clientID, orgID: orgID, callback: { [self] result in
+        quickConnectService.deleteDevice(clientID: parentExtension.stateManager.clientID, orgID: orgID, callback: { [] result in
         switch result {
             case .success(_):
                 // log here
@@ -99,24 +106,16 @@ class QuickConnectManager {
 
     }
     
-
-    @objc private func handleShakeGesture() {
-        parentExtension.shouldProcessEvents = true
-        parentExtension.invalidateTimer()
-        DispatchQueue.main.async {
-             self.quickConnectView.show()
-        }
-    }
 }
 
 
-#if DEBUG
-extension UIWindow {
-    open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if(motion == UIEvent.EventSubtype.motionShake) {
-            NotificationCenter.default.post(name: NSNotification.Name(AssuranceConstants.QuickConnect.SHAKE_NOTIFICATION_KEY),
-                                            object: nil)
-        }
-    }
-}
-#endif
+//#if DEBUG
+//extension UIWindow {
+//    open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+//        if(motion == UIEvent.EventSubtype.motionShake) {
+//            NotificationCenter.default.post(name: NSNotification.Name(AssuranceConstants.QuickConnect.SHAKE_NOTIFICATION_KEY),
+//                                            object: nil)
+//        }
+//    }
+//}
+//#endif
