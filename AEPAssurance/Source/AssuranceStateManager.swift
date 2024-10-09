@@ -42,6 +42,11 @@ class AssuranceStateManager {
         return newClientID
 
     }()
+    
+    lazy var appSessionID: String = {
+        // Generate a new app session ID only once
+        return UUID().uuidString
+    }()
 
     /// property representing the webSocket URL of the ongoing Assurance session
     /// A valid value on this property represents that an assurance session is currently running.

@@ -101,7 +101,7 @@ public class Assurance: NSObject, Extension {
         }
 
         /// forward all other events to Assurance session
-        let assuranceEvent = AssuranceEvent.from(event: event)
+        let assuranceEvent = AssuranceEvent.from(event: event, sessionID: stateManager.appSessionID)
         sessionOrchestrator.queueEvent(assuranceEvent)
 
         /// NearbyPOIs and Places entry/exits events are logged in the Status UI
@@ -232,7 +232,7 @@ public class Assurance: NSObject, Extension {
         }
 
         let sharedStatePayload = [sharedContentKey: sharedState.value]
-        var assuranceEvent = AssuranceEvent.from(event: event)
+        var assuranceEvent = AssuranceEvent.from(event: event, sessionID: stateManager.appSessionID)
         assuranceEvent.payload?.updateValue(AnyCodable.init(sharedStatePayload), forKey: AssuranceConstants.PayloadKey.METADATA)
         sessionOrchestrator.queueEvent(assuranceEvent)
     }

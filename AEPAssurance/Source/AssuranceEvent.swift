@@ -26,6 +26,7 @@ struct AssuranceEvent: Codable {
     var payload: [String: AnyCodable]?
     var eventNumber: Int32?
     var timestamp: Date?
+    var sessionID: String?
     var metadata: [String: AnyCodable]?
 
     /// Decodes a JSON data into a `AssuranceEvent`
@@ -69,7 +70,7 @@ struct AssuranceEvent: Codable {
     /// - Parameters:
     ///     - mobileCoreEvent:An event from MobileCore dispatched by event-hub and captured by wild card listener.
     /// - Returns: an `AssuranceEvent`
-    static func from(event: Event) -> AssuranceEvent {
+    static func from(event: Event, sessionID : String) -> AssuranceEvent {
         var payload: [String: AnyCodable] = [:]
         payload[AssuranceConstants.ACPExtensionEventKey.NAME] = AnyCodable.init(event.name)
         payload[AssuranceConstants.ACPExtensionEventKey.TYPE] = AnyCodable.init(event.type.lowercased())
@@ -92,7 +93,7 @@ struct AssuranceEvent: Codable {
             payload[AssuranceConstants.ACPExtensionEventKey.PARENT_IDENTIFIER] = AnyCodable.init(parentID.uuidString)
         }
 
-        return AssuranceEvent(type: AssuranceConstants.EventType.GENERIC, payload: payload)
+        return AssuranceEvent(type: AssuranceConstants.EventType.GENERIC, payload: payload, sessionID: sessionID)
     }
 
     /// Initializer to construct `AssuranceEvent`instance with the given parameters
@@ -102,13 +103,14 @@ struct AssuranceEvent: Codable {
     ///   - payload: A dictionary representing the payload to be sent wrapped in the event. This will be serialized into JSON in the transportation process
     ///   - timestamp: optional argument representing the time original event was created. If not provided current time is taken
     ///   - vendor: vendor for the created `AssuranceEvent` defaults to "com.adobe.griffon.mobile".
-    init(type: String, payload: [String: AnyCodable]?, timestamp: Date = Date(), vendor: String = AssuranceConstants.Vendor.MOBILE, metadata: [String: AnyCodable]? = nil) {
+    init(type: String, payload: [String: AnyCodable]?, timestamp: Date = Date(), vendor: String = AssuranceConstants.Vendor.MOBILE, metadata: [String: AnyCodable]? = nil, sessionID: String? = nil) {
         self.type = type
         self.payload = payload
         self.timestamp = timestamp
         self.vendor = vendor
         self.eventNumber = AssuranceEvent.generateEventNumber()
         self.metadata = metadata
+        self.sessionID = sessionID
     }
 
     /// Returns the type of the command. Applies only for command events. This method returns nil for all other `AssuranceEvent`s.
