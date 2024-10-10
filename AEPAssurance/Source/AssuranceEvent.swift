@@ -26,7 +26,6 @@ struct AssuranceEvent: Codable {
     var payload: [String: AnyCodable]?
     var eventNumber: Int32?
     var timestamp: Date?
-    var sessionID: String?
     var metadata: [String: AnyCodable]?
 
     /// Decodes a JSON data into a `AssuranceEvent`
@@ -92,6 +91,8 @@ struct AssuranceEvent: Codable {
         if let parentID = event.parentID {
             payload[AssuranceConstants.ACPExtensionEventKey.PARENT_IDENTIFIER] = AnyCodable.init(parentID.uuidString)
         }
+        
+        payload["appSessionID"] = AnyCodable.init(sessionID)
 
         return AssuranceEvent(type: AssuranceConstants.EventType.GENERIC, payload: payload, sessionID: sessionID)
     }
@@ -110,7 +111,6 @@ struct AssuranceEvent: Codable {
         self.vendor = vendor
         self.eventNumber = AssuranceEvent.generateEventNumber()
         self.metadata = metadata
-        self.sessionID = sessionID
     }
 
     /// Returns the type of the command. Applies only for command events. This method returns nil for all other `AssuranceEvent`s.
