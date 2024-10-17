@@ -19,7 +19,9 @@ extension AssuranceSession {
     ///
     func sendClientInfoEvent() {
         Log.debug(label: AssuranceConstants.LOG_TAG, "Sending client info event to Assurance")
-        let clientEvent = AssuranceEvent.init(type: AssuranceConstants.EventType.CLIENT, payload: AssuranceClientInfo.getData())
+        var clientData = AssuranceClientInfo.getData()
+        clientData["appSessionID"] = AnyCodable.init(stateManager.appSessionID)
+        let clientEvent = AssuranceEvent.init(type: AssuranceConstants.EventType.CLIENT, payload: clientData)
         self.socket.sendEvent(clientEvent)
     }
 
